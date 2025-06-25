@@ -23,6 +23,7 @@ const resources = {
       create: 'Create',
       name: 'Name',
       id: 'ID',
+      status: 'Status',
       
       // Dashboard
       totalProjects: 'Total Projects',
@@ -54,6 +55,14 @@ const resources = {
       selectSupplier: 'Select Supplier',
       dragDropFile: 'Drag & drop a file here, or click to select',
       fileSelected: 'File selected',
+      
+      // Purchase Order Status
+      draft: 'Draft',
+      sentForApproval: 'Sent for Approval',
+      inProgressByContractsOffice: 'In Progress by Contracts Office',
+      assigned: 'Assigned',
+      paid: 'Paid',
+      rejected: 'Rejected',
       
       // Suppliers
       addSupplier: 'Add Supplier',
@@ -87,6 +96,7 @@ const resources = {
       create: 'Crea',
       name: 'Nome',
       id: 'ID',
+      status: 'Stato',
       
       // Dashboard
       totalProjects: 'Progetti Totali',
@@ -118,6 +128,14 @@ const resources = {
       selectSupplier: 'Seleziona Fornitore',
       dragDropFile: 'Trascina e rilascia un file qui, o clicca per selezionare',
       fileSelected: 'File selezionato',
+      
+      // Purchase Order Status
+      draft: 'Bozza',
+      sentForApproval: 'Inviato per Approvazione',
+      inProgressByContractsOffice: 'In Elaborazione dall\'Ufficio Contratti',
+      assigned: 'Assegnato',
+      paid: 'Pagato',
+      rejected: 'Rifiutato',
       
       // Suppliers
       addSupplier: 'Aggiungi Fornitore',
