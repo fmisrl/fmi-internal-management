@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/Layout/Sidebar';
@@ -36,6 +35,8 @@ interface PurchaseOrder {
 }
 
 const Index = () => {
+  console.log('Index component rendering...');
+  
   const [activeSection, setActiveSection] = useState('dashboard');
   const [customers, setCustomers] = useState<Customer[]>([
     { id: '1', name: 'Azienda Roma S.p.A.' },
@@ -112,6 +113,8 @@ const Index = () => {
   };
 
   const renderContent = () => {
+    console.log('Rendering content for section:', activeSection);
+    
     switch (activeSection) {
       case 'dashboard':
         return (
@@ -165,6 +168,10 @@ const Index = () => {
         return <Dashboard customers={customers} projects={projects} purchaseOrders={purchaseOrders} />;
     }
   };
+
+  useEffect(() => {
+    console.log('Index component mounted successfully');
+  }, []);
 
   return (
     <SidebarProvider>
