@@ -40,10 +40,11 @@ interface Supplier {
 interface PurchaseOrder {
   id: string;
   name: string;
-  cigCode: string;
+  cigCode?: string;
   supplierId: string;
   projectId?: string;
   signedFile?: File;
+  status: 'draft' | 'sent_for_approval' | 'in_progress' | 'assigned' | 'paid' | 'rejected';
 }
 
 interface PurchaseOrderFormProps {
@@ -70,7 +71,8 @@ export const PurchaseOrderForm = ({
     name: '', 
     cigCode: '', 
     supplierId: '', 
-    projectId: '' 
+    projectId: '',
+    status: 'draft' as PurchaseOrder['status']
   });
   const [signedFile, setSignedFile] = useState<File | undefined>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -79,13 +81,14 @@ export const PurchaseOrderForm = ({
     if (purchaseOrder) {
       setFormData({ 
         name: purchaseOrder.name,
-        cigCode: purchaseOrder.cigCode,
+        cigCode: purchaseOrder.cigCode || '',
         supplierId: purchaseOrder.supplierId,
-        projectId: purchaseOrder.projectId || ''
+        projectId: purchaseOrder.projectId || '',
+        status: purchaseOrder.status
       });
       setSignedFile(purchaseOrder.signedFile);
     } else {
-      setFormData({ name: '', cigCode: '', supplierId: '', projectId: '' });
+      setFormData({ name: '', cigCode: '', supplierId: '', projectId: '', status: 'draft' });
       setSignedFile(undefined);
     }
     setErrors({});
@@ -105,9 +108,8 @@ export const PurchaseOrderForm = ({
       newErrors.name = t('required');
     }
     
-    if (!formData.cigCode.trim()) {
-      newErrors.cigCode = t('required');
-    } else if (formData.cigCode.length !== 10) {
+    // CIG code is optional now
+    if (formData.cigCode && formData.cigCode.length !== 10) {
       newErrors.cigCode = t('cigCodeLength');
     }
     
@@ -131,10 +133,11 @@ export const PurchaseOrderForm = ({
     const poData: PurchaseOrder = {
       id: purchaseOrder?.id || generatePOId(),
       name: formData.name.trim(),
-      cigCode: formData.cigCode.trim(),
+      cigCode: formData.cigCode.trim() || undefined,
       supplierId: formData.supplierId,
       projectId: formData.projectId || undefined,
       signedFile: signedFile,
+      status: formData.status,
     };
     
     onSave(poData);
@@ -169,14 +172,14 @@ export const PurchaseOrderForm = ({
             </div>
 
             <div>
-              <Label htmlFor="cigCode">{t('cigCode')} *</Label>
+              <Label htmlFor="cigCode">{t('cigCode')}</Label>
               <Input
                 id="cigCode"
                 value={formData.cigCode}
                 onChange={(e) => setFormData({ ...formData, cigCode: e.target.value })}
                 maxLength={10}
                 className={errors.cigCode ? 'border-red-500' : ''}
-                placeholder="10 caratteri alfanumerici"
+                placeholder="10 caratteri alfanumerici (opzionale)"
               />
               {errors.cigCode && <p className="text-red-500 text-sm mt-1">{errors.cigCode}</p>}
             </div>
@@ -216,6 +219,26 @@ export const PurchaseOrderForm = ({
                       {getProjectDisplay(project)}
                     </SelectItem>
                   ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="status">{t('status')}</Label>
+              <Select
+                value={formData.status}
+                onValueChange={(value) => setFormData({ ...formData, status: value as PurchaseOrder['status'] })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="draft">{t('draft')}</SelectItem>
+                  <SelectItem value="sent_for_approval">{t('sentForApproval')}</SelectItem>
+                  <SelectItem value="in_progress">{t('inProgressByContractsOffice')}</SelectItem>
+                  <SelectItem value="assigned">{t('assigned')}</SelectItem>
+                  <SelectItem value="paid">{t('paid')}</SelectItem>
+                  <SelectItem value="rejected">{t('rejected')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

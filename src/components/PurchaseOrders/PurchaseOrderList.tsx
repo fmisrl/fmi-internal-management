@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Search, Edit, Trash, Eye } from 'lucide-react';
 import { PurchaseOrderForm } from './PurchaseOrderForm';
 import { SupplierForm } from '../Suppliers/SupplierForm';
+import { StatusBadge } from './StatusBadge';
 
 interface Customer {
   id: string;
@@ -36,10 +37,11 @@ interface Supplier {
 interface PurchaseOrder {
   id: string;
   name: string;
-  cigCode: string;
+  cigCode?: string;
   supplierId: string;
   projectId?: string;
   signedFile?: File;
+  status: 'draft' | 'sent_for_approval' | 'in_progress' | 'assigned' | 'paid' | 'rejected';
 }
 
 interface PurchaseOrderListProps {
@@ -153,6 +155,7 @@ export const PurchaseOrderList = ({
                 <TableHead>{t('cigCode')}</TableHead>
                 <TableHead>{t('supplier')}</TableHead>
                 <TableHead>{t('project')}</TableHead>
+                <TableHead>{t('status')}</TableHead>
                 <TableHead className="text-right">{t('actions')}</TableHead>
               </TableRow>
             </TableHeader>
@@ -161,7 +164,7 @@ export const PurchaseOrderList = ({
                 <TableRow key={po.id}>
                   <TableCell className="font-mono text-sm">{po.id}</TableCell>
                   <TableCell>{po.name}</TableCell>
-                  <TableCell className="font-mono text-sm">{po.cigCode}</TableCell>
+                  <TableCell className="font-mono text-sm">{po.cigCode || '-'}</TableCell>
                   <TableCell>
                     <Button
                       variant="link"
@@ -172,6 +175,9 @@ export const PurchaseOrderList = ({
                     </Button>
                   </TableCell>
                   <TableCell className="text-sm">{getProjectDisplay(po.projectId)}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={po.status} />
+                  </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end space-x-2">
                       <Button 

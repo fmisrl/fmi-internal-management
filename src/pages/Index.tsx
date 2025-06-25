@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/Layout/Sidebar';
@@ -28,10 +29,11 @@ interface Supplier {
 interface PurchaseOrder {
   id: string;
   name: string;
-  cigCode: string;
+  cigCode?: string;
   supplierId: string;
   projectId?: string;
   signedFile?: File;
+  status: 'draft' | 'sent_for_approval' | 'in_progress' | 'assigned' | 'paid' | 'rejected';
 }
 
 const Index = () => {
@@ -56,7 +58,8 @@ const Index = () => {
       name: 'Ordine Software', 
       cigCode: 'Z1A2B3C4D5', 
       supplierId: '1',
-      projectId: '1'
+      projectId: '1',
+      status: 'draft'
     },
   ]);
 
