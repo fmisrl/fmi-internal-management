@@ -2,8 +2,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
-
-type PurchaseOrderStatus = 'draft' | 'waiting_for_approval' | 'in_progress' | 'assigned' | 'paid' | 'rejected';
+import { PurchaseOrderStatus } from '@/types';
 
 interface StatusBadgeProps {
   status: PurchaseOrderStatus;

@@ -16,33 +16,7 @@ import { Plus, Search, Edit, Trash, Eye } from 'lucide-react';
 import { PurchaseOrderForm } from './PurchaseOrderForm';
 import { SupplierForm } from '../Suppliers/SupplierForm';
 import { StatusBadge } from './StatusBadge';
-
-interface Customer {
-  id: string;
-  name: string;
-}
-
-interface Project {
-  id: string;
-  customerId?: string;
-  cupCode?: string;
-}
-
-interface Supplier {
-  id: string;
-  name: string;
-  vatNumber: string;
-}
-
-interface PurchaseOrder {
-  id: string;
-  name: string;
-  cigCode?: string;
-  supplierId: string;
-  projectId?: string;
-  signedFile?: File;
-  status: 'draft' | 'sent_for_approval' | 'in_progress' | 'assigned' | 'paid' | 'rejected';
-}
+import { Customer, Project, Supplier, PurchaseOrder } from '@/types';
 
 interface PurchaseOrderListProps {
   purchaseOrders: PurchaseOrder[];
@@ -89,7 +63,7 @@ export const PurchaseOrderList = ({
     return (
       po.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       po.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      po.cigCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (po.cigCode && po.cigCode.toLowerCase().includes(searchTerm.toLowerCase())) ||
       supplierName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       projectDisplay.toLowerCase().includes(searchTerm.toLowerCase())
     );

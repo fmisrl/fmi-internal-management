@@ -19,33 +19,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { FileUpload } from './FileUpload';
-
-interface Customer {
-  id: string;
-  name: string;
-}
-
-interface Project {
-  id: string;
-  customerId?: string;
-  cupCode?: string;
-}
-
-interface Supplier {
-  id: string;
-  name: string;
-  vatNumber: string;
-}
-
-interface PurchaseOrder {
-  id: string;
-  name: string;
-  cigCode?: string;
-  supplierId: string;
-  projectId?: string;
-  signedFile?: File;
-  status: 'draft' | 'sent_for_approval' | 'in_progress' | 'assigned' | 'paid' | 'rejected';
-}
+import { Customer, Project, Supplier, PurchaseOrder, PurchaseOrderStatus } from '@/types';
 
 interface PurchaseOrderFormProps {
   isOpen: boolean;
@@ -72,7 +46,7 @@ export const PurchaseOrderForm = ({
     cigCode: '', 
     supplierId: '', 
     projectId: '',
-    status: 'draft' as PurchaseOrder['status']
+    status: 'draft' as PurchaseOrderStatus
   });
   const [signedFile, setSignedFile] = useState<File | undefined>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -227,14 +201,14 @@ export const PurchaseOrderForm = ({
               <Label htmlFor="status">{t('status')}</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value) => setFormData({ ...formData, status: value as PurchaseOrder['status'] })}
+                onValueChange={(value) => setFormData({ ...formData, status: value as PurchaseOrderStatus })}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="draft">{t('draft')}</SelectItem>
-                  <SelectItem value="sent_for_approval">{t('sentForApproval')}</SelectItem>
+                  <SelectItem value="waiting_for_approval">{t('waitingForApproval')}</SelectItem>
                   <SelectItem value="in_progress">{t('inProgressByContractsOffice')}</SelectItem>
                   <SelectItem value="assigned">{t('assigned')}</SelectItem>
                   <SelectItem value="paid">{t('paid')}</SelectItem>
