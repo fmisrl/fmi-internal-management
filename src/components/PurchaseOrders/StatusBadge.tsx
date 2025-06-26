@@ -26,7 +26,7 @@ export const StatusBadge = ({ status }: StatusBadgeProps) => {
       case 'in_progress':
         return {
           label: t('inProgressByContractsOffice'),
-          className: 'bg-yellow-500 hover:bg-yellow-600 text-white'
+          className: 'bg-orange-500 hover:bg-orange-600 text-white'
         };
       case 'assigned':
         return {
@@ -42,6 +42,11 @@ export const StatusBadge = ({ status }: StatusBadgeProps) => {
         return {
           label: t('rejected'),
           className: 'bg-red-500 hover:bg-red-600 text-white'
+        };
+      case 'closed':
+        return {
+          label: t('closed'),
+          className: 'bg-purple-500 hover:bg-purple-600 text-white'
         };
       default:
         return {

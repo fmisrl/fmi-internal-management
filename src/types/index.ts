@@ -16,7 +16,7 @@ export interface Supplier {
   vatNumber: string;
 }
 
-export type PurchaseOrderStatus = 'draft' | 'waiting_for_approval' | 'in_progress' | 'assigned' | 'paid' | 'rejected';
+export type PurchaseOrderStatus = 'draft' | 'waiting_for_approval' | 'in_progress' | 'assigned' | 'paid' | 'rejected' | 'closed';
 
 export interface PurchaseOrder {
   id: string;
@@ -27,6 +27,15 @@ export interface PurchaseOrder {
   signedFile?: File;
   status: PurchaseOrderStatus;
   contractsOfficeLetter?: File;
+  explanation?: string;
+  createdBy?: string;
+  approvedBy?: string;
+  approvedDate?: Date;
+  rejectedBy?: string;
+  rejectedDate?: Date;
+  assignedDate?: Date;
+  closedDate?: Date;
+  createdDate?: Date;
 }
 
 export type BillStatus = 'needs_approval' | 'approved' | 'paid' | 'rejected';
@@ -44,4 +53,13 @@ export interface Bill {
   paymentDate?: Date;
   approvedBy?: string;
   paidBy?: string;
+  authorizedPaymentFile?: File;
+}
+
+export interface TimelineEvent {
+  id: string;
+  type: 'created' | 'submitted' | 'approved' | 'rejected' | 'assigned' | 'closed' | 'bill_uploaded' | 'bill_approved' | 'bill_paid';
+  description: string;
+  date: Date;
+  user?: string;
 }

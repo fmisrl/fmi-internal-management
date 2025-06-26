@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -46,6 +46,7 @@ export const PurchaseOrderForm = ({
     cigCode: '', 
     supplierId: '', 
     projectId: '',
+    explanation: '',
     status: 'draft' as PurchaseOrderStatus
   });
   const [signedFile, setSignedFile] = useState<File | undefined>();
@@ -58,11 +59,12 @@ export const PurchaseOrderForm = ({
         cigCode: purchaseOrder.cigCode || '',
         supplierId: purchaseOrder.supplierId,
         projectId: purchaseOrder.projectId || '',
+        explanation: purchaseOrder.explanation || '',
         status: purchaseOrder.status
       });
       setSignedFile(purchaseOrder.signedFile);
     } else {
-      setFormData({ name: '', cigCode: '', supplierId: '', projectId: '', status: 'draft' });
+      setFormData({ name: '', cigCode: '', supplierId: '', projectId: '', explanation: '', status: 'draft' });
       setSignedFile(undefined);
     }
     setErrors({});
@@ -82,13 +84,16 @@ export const PurchaseOrderForm = ({
       newErrors.name = t('required');
     }
     
-    // CIG code is optional now
     if (formData.cigCode && formData.cigCode.length !== 10) {
       newErrors.cigCode = t('cigCodeLength');
     }
     
     if (!formData.supplierId) {
       newErrors.supplierId = t('required');
+    }
+
+    if (!formData.explanation.trim()) {
+      newErrors.explanation = t('required');
     }
     
     if (!purchaseOrder && !signedFile) {
@@ -110,8 +115,10 @@ export const PurchaseOrderForm = ({
       cigCode: formData.cigCode.trim() || undefined,
       supplierId: formData.supplierId,
       projectId: formData.projectId || undefined,
+      explanation: formData.explanation.trim(),
       signedFile: signedFile,
       status: formData.status,
+      createdDate: purchaseOrder?.createdDate || new Date(),
     };
     
     onSave(poData);
@@ -143,6 +150,19 @@ export const PurchaseOrderForm = ({
                 className={errors.name ? 'border-red-500' : ''}
               />
               {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+            </div>
+
+            <div>
+              <Label htmlFor="explanation">{t('explanation')} *</Label>
+              <Textarea
+                id="explanation"
+                value={formData.explanation}
+                onChange={(e) => setFormData({ ...formData, explanation: e.target.value })}
+                className={errors.explanation ? 'border-red-500' : ''}
+                placeholder={t('explainPurchaseReason')}
+                rows={3}
+              />
+              {errors.explanation && <p className="text-red-500 text-sm mt-1">{errors.explanation}</p>}
             </div>
 
             <div>
@@ -213,6 +233,7 @@ export const PurchaseOrderForm = ({
                   <SelectItem value="assigned">{t('assigned')}</SelectItem>
                   <SelectItem value="paid">{t('paid')}</SelectItem>
                   <SelectItem value="rejected">{t('rejected')}</SelectItem>
+                  <SelectItem value="closed">{t('closed')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

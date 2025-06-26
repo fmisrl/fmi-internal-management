@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -12,20 +11,26 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Search, Edit, Trash, Eye } from 'lucide-react';
+import { Plus, Search, Edit, Trash, Eye, CheckCircle, XCircle } from 'lucide-react';
 import { PurchaseOrderForm } from './PurchaseOrderForm';
+import { PurchaseOrderDetails } from './PurchaseOrderDetails';
 import { SupplierForm } from '../Suppliers/SupplierForm';
 import { StatusBadge } from './StatusBadge';
-import { Customer, Project, Supplier, PurchaseOrder } from '@/types';
+import { Customer, Project, Supplier, PurchaseOrder, Bill, TimelineEvent } from '@/types';
 
 interface PurchaseOrderListProps {
   purchaseOrders: PurchaseOrder[];
   projects: Project[];
   suppliers: Supplier[];
   customers: Customer[];
+  bills: Bill[];
   onAddPurchaseOrder: (po: PurchaseOrder) => void;
   onEditPurchaseOrder: (po: PurchaseOrder) => void;
   onDeletePurchaseOrder: (id: string) => void;
+  onApprovePO: (poId: string) => void;
+  onRejectPO: (poId: string) => void;
+  onAssignPO: (poId: string) => void;
+  onClosePO: (poId: string) => void;
 }
 
 export const PurchaseOrderList = ({ 
@@ -33,9 +38,14 @@ export const PurchaseOrderList = ({
   projects,
   suppliers,
   customers,
+  bills,
   onAddPurchaseOrder, 
   onEditPurchaseOrder, 
-  onDeletePurchaseOrder 
+  onDeletePurchaseOrder,
+  onApprovePO,
+  onRejectPO,
+  onAssignPO,
+  onClosePO
 }: PurchaseOrderListProps) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,6 +53,8 @@ export const PurchaseOrderList = ({
   const [editingPO, setEditingPO] = useState<PurchaseOrder | undefined>();
   const [supplierModalOpen, setSupplierModalOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | undefined>();
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [selectedPO, setSelectedPO] = useState<PurchaseOrder | undefined>();
 
   const getSupplierName = (supplierId: string) => {
     const supplier = suppliers.find(s => s.id === supplierId);
@@ -55,6 +67,101 @@ export const PurchaseOrderList = ({
     if (!project) return '-';
     const customer = customers.find(c => c.id === project.customerId);
     return `${project.id} - ${customer?.name || 'N/A'}`;
+  };
+
+  const generateTimeline = (po: PurchaseOrder): TimelineEvent[] => {
+    const events: TimelineEvent[] = [];
+    
+    if (po.createdDate) {
+      events.push({
+        id: `${po.id}-created`,
+        type: 'created',
+        description: t('purchaseOrderCreated'),
+        date: po.createdDate,
+        user: po.createdBy
+      });
+    }
+    
+    if (po.status === 'waiting_for_approval' || po.approvedDate || po.rejectedDate) {
+      events.push({
+        id: `${po.id}-submitted`,
+        type: 'submitted',
+        description: t('submittedForApproval'),
+        date: po.createdDate || new Date(),
+        user: po.createdBy
+      });
+    }
+    
+    if (po.approvedDate) {
+      events.push({
+        id: `${po.id}-approved`,
+        type: 'approved',
+        description: t('purchaseOrderApproved'),
+        date: po.approvedDate,
+        user: po.approvedBy
+      });
+    }
+    
+    if (po.rejectedDate) {
+      events.push({
+        id: `${po.id}-rejected`,
+        type: 'rejected',
+        description: t('purchaseOrderRejected'),
+        date: po.rejectedDate,
+        user: po.rejectedBy
+      });
+    }
+    
+    if (po.assignedDate) {
+      events.push({
+        id: `${po.id}-assigned`,
+        type: 'assigned',
+        description: t('purchaseOrderAssigned'),
+        date: po.assignedDate
+      });
+    }
+    
+    if (po.closedDate) {
+      events.push({
+        id: `${po.id}-closed`,
+        type: 'closed',
+        description: t('purchaseOrderClosed'),
+        date: po.closedDate
+      });
+    }
+    
+    // Add bill events
+    const poBills = bills.filter(bill => bill.purchaseOrderId === po.id);
+    poBills.forEach(bill => {
+      events.push({
+        id: `${bill.id}-uploaded`,
+        type: 'bill_uploaded',
+        description: t('billUploaded', { fileName: bill.fileName }),
+        date: bill.uploadDate
+      });
+      
+      if (bill.approvalDate) {
+        events.push({
+          id: `${bill.id}-approved`,
+          type: 'bill_approved',
+          description: t('billApproved', { fileName: bill.fileName }),
+          date: bill.approvalDate,
+          user: bill.approvedBy
+        });
+      }
+      
+      if (bill.paymentDate) {
+        events.push({
+          id: `${bill.id}-paid`,
+          type: 'bill_paid',
+          description: t('billPaid', { fileName: bill.fileName }),
+          date: bill.paymentDate,
+          user: bill.paidBy
+        });
+      }
+    });
+    
+    return events.sort((a, b) => a.date.getTime() - b.date.getTime());
   };
 
   const filteredPOs = purchaseOrders.filter(po => {
@@ -93,6 +200,84 @@ export const PurchaseOrderList = ({
       setSelectedSupplier(supplier);
       setSupplierModalOpen(true);
     }
+  };
+
+  const handleViewDetails = (po: PurchaseOrder) => {
+    setSelectedPO(po);
+    setDetailsModalOpen(true);
+  };
+
+  const getActionButtons = (po: PurchaseOrder) => {
+    const buttons = [];
+    
+    // View details button
+    buttons.push(
+      <Button 
+        key="view"
+        variant="outline" 
+        size="sm"
+        onClick={() => handleViewDetails(po)}
+      >
+        <Eye className="h-4 w-4" />
+      </Button>
+    );
+    
+    // Edit button (only for draft or rejected)
+    if (po.status === 'draft' || po.status === 'rejected') {
+      buttons.push(
+        <Button 
+          key="edit"
+          variant="outline" 
+          size="sm"
+          onClick={() => handleEditPO(po)}
+        >
+          <Edit className="h-4 w-4" />
+        </Button>
+      );
+    }
+    
+    // Workflow buttons
+    if (po.status === 'waiting_for_approval') {
+      buttons.push(
+        <Button 
+          key="approve"
+          variant="outline" 
+          size="sm"
+          onClick={() => onApprovePO(po.id)}
+          className="text-green-600 hover:text-green-700"
+        >
+          <CheckCircle className="h-4 w-4" />
+        </Button>
+      );
+      buttons.push(
+        <Button 
+          key="reject"
+          variant="outline" 
+          size="sm"
+          onClick={() => onRejectPO(po.id)}
+          className="text-red-600 hover:text-red-700"
+        >
+          <XCircle className="h-4 w-4" />
+        </Button>
+      );
+    }
+    
+    // Delete button (only for draft)
+    if (po.status === 'draft') {
+      buttons.push(
+        <Button 
+          key="delete"
+          variant="outline" 
+          size="sm"
+          onClick={() => onDeletePurchaseOrder(po.id)}
+          className="text-red-600 hover:text-red-700"
+        >
+          <Trash className="h-4 w-4" />
+        </Button>
+      );
+    }
+    
+    return buttons;
   };
 
   return (
@@ -154,20 +339,7 @@ export const PurchaseOrderList = ({
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end space-x-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => handleEditPO(po)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => onDeletePurchaseOrder(po.id)}
-                      >
-                        <Trash className="h-4 w-4" />
-                      </Button>
+                      {getActionButtons(po)}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -194,6 +366,23 @@ export const PurchaseOrderList = ({
         supplier={selectedSupplier}
         readonly={true}
       />
+
+      {selectedPO && (
+        <PurchaseOrderDetails
+          isOpen={detailsModalOpen}
+          onClose={() => setDetailsModalOpen(false)}
+          purchaseOrder={selectedPO}
+          bills={bills.filter(bill => bill.purchaseOrderId === selectedPO.id)}
+          timeline={generateTimeline(selectedPO)}
+          suppliers={suppliers}
+          customers={customers}
+          projects={projects}
+          onApprovePO={onApprovePO}
+          onRejectPO={onRejectPO}
+          onAssignPO={onAssignPO}
+          onClosePO={onClosePO}
+        />
+      )}
     </div>
   );
 };

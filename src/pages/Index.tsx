@@ -90,7 +90,12 @@ const Index = () => {
 
   // Purchase Order management
   const handleAddPurchaseOrder = (po: PurchaseOrder) => {
-    setPurchaseOrders([...purchaseOrders, po]);
+    const newPO = {
+      ...po,
+      createdDate: new Date(),
+      createdBy: 'Current User' // In real app, this would come from auth
+    };
+    setPurchaseOrders([...purchaseOrders, newPO]);
   };
 
   const handleEditPurchaseOrder = (updatedPO: PurchaseOrder) => {
@@ -99,6 +104,56 @@ const Index = () => {
 
   const handleDeletePurchaseOrder = (id: string) => {
     setPurchaseOrders(purchaseOrders.filter(p => p.id !== id));
+  };
+
+  const handleApprovePO = (poId: string) => {
+    setPurchaseOrders(pos => pos.map(po => 
+      po.id === poId 
+        ? { 
+            ...po, 
+            status: 'in_progress', 
+            approvedDate: new Date(),
+            approvedBy: 'General Manager' // In real app, this would come from auth
+          }
+        : po
+    ));
+  };
+
+  const handleRejectPO = (poId: string) => {
+    setPurchaseOrders(pos => pos.map(po => 
+      po.id === poId 
+        ? { 
+            ...po, 
+            status: 'rejected',
+            rejectedDate: new Date(),
+            rejectedBy: 'General Manager' // In real app, this would come from auth
+          }
+        : po
+    ));
+  };
+
+  const handleAssignPO = (poId: string) => {
+    setPurchaseOrders(pos => pos.map(po => 
+      po.id === poId 
+        ? { 
+            ...po, 
+            status: 'assigned',
+            assignedDate: new Date()
+          }
+        : po
+    ));
+  };
+
+  const handleClosePO = (poId: string) => {
+    setPurchaseOrders(pos => pos.map(po => 
+      po.id === poId 
+        ? { 
+            ...po, 
+            status: 'closed',
+            closedDate: new Date()
+          }
+        : po
+    ));
   };
 
   // Bill management
@@ -176,9 +231,14 @@ const Index = () => {
             projects={projects}
             suppliers={suppliers}
             customers={customers}
+            bills={bills}
             onAddPurchaseOrder={handleAddPurchaseOrder}
             onEditPurchaseOrder={handleEditPurchaseOrder}
             onDeletePurchaseOrder={handleDeletePurchaseOrder}
+            onApprovePO={handleApprovePO}
+            onRejectPO={handleRejectPO}
+            onAssignPO={handleAssignPO}
+            onClosePO={handleClosePO}
           />
         );
       case 'bills':

@@ -1,198 +1,103 @@
-
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 const resources = {
-  en: {
-    translation: {
-      // Navigation
-      dashboard: 'Dashboard',
-      customers: 'Customers',
-      projects: 'Projects',
-      purchaseOrders: 'Purchase Orders',
-      suppliers: 'Suppliers',
-      bills: 'Bills',
-      
-      // Common
-      add: 'Add',
-      edit: 'Edit',
-      delete: 'Delete',
-      save: 'Save',
-      cancel: 'Cancel',
-      search: 'Search',
-      actions: 'Actions',
-      create: 'Create',
-      name: 'Name',
-      id: 'ID',
-      status: 'Status',
-      
-      // Dashboard
-      totalProjects: 'Total Projects',
-      totalCustomers: 'Total Customers',
-      totalPurchaseOrders: 'Total Purchase Orders',
-      recentActivity: 'Recent Activity',
-      
-      // Customers
-      addCustomer: 'Add Customer',
-      editCustomer: 'Edit Customer',
-      customerName: 'Customer Name',
-      
-      // Projects
-      addProject: 'Add Project',
-      editProject: 'Edit Project',
-      customer: 'Customer',
-      cupCode: 'CUP Code',
-      selectCustomer: 'Select Customer',
-      
-      // Purchase Orders
-      addPurchaseOrder: 'Add Purchase Order',
-      editPurchaseOrder: 'Edit Purchase Order',
-      poName: 'PO Name',
-      cigCode: 'CIG Code',
-      supplier: 'Supplier',
-      project: 'Project',
-      signedFile: 'Signed File',
-      selectProject: 'Select Project',
-      selectSupplier: 'Select Supplier',
-      dragDropFile: 'Drag & drop a file here, or click to select',
-      fileSelected: 'File selected',
-      
-      // Purchase Order Status
-      draft: 'Draft',
-      sentForApproval: 'Sent for Approval',
-      waitingForApproval: 'Waiting for Approval',
-      inProgressByContractsOffice: 'In Progress by Contracts Office',
-      assigned: 'Assigned',
-      paid: 'Paid',
-      rejected: 'Rejected',
-      
-      // Bills
-      billsManagement: 'Bills Management',
-      importBills: 'Import Bills',
-      importBillsTitle: 'Import XML Bills',
-      importBillsDescription: 'Upload XML files containing bill information. Multiple files can be selected.',
-      billId: 'Bill ID',
-      fileName: 'File Name',
-      billNumber: 'Bill Number',
-      amount: 'Amount',
-      purchaseOrder: 'Purchase Order',
-      uploadDate: 'Upload Date',
-      allStatuses: 'All Statuses',
-      needsApproval: 'Needs Approval',
-      approved: 'Approved',
-      markAsPaid: 'Mark as Paid',
-      dragDropXmlFiles: 'Drag & drop XML files here',
-      orClickToSelect: 'or click to select files',
-      selectFiles: 'Select Files',
-      selectedFiles: 'Selected Files',
-      importFiles: 'Import Files',
-      
-      // Suppliers
-      addSupplier: 'Add Supplier',
-      editSupplier: 'Edit Supplier',
-      vatNumber: 'VAT Number',
-      supplierDetails: 'Supplier Details',
-      
-      // Validation
-      required: 'This field is required',
-      cigCodeLength: 'CIG Code must be exactly 10 characters',
-      cupCodeLength: 'CUP Code must be exactly 15 characters',
-    }
-  },
   it: {
     translation: {
-      // Navigation
-      dashboard: 'Dashboard',
-      customers: 'Clienti',
-      projects: 'Progetti',
-      purchaseOrders: 'Ordini di Acquisto',
-      suppliers: 'Fornitori',
-      bills: 'Fatture',
+      'dashboard': 'Dashboard',
+      'customers': 'Clienti',
+      'projects': 'Progetti',
+      'purchaseOrders': 'Ordini di Acquisto',
+      'bills': 'Fatture',
+      'suppliers': 'Fornitori',
+      'settings': 'Impostazioni',
+      'logout': 'Esci',
+      'welcome': 'Benvenuto',
+      'totalCustomers': 'Clienti Totali',
+      'totalProjects': 'Progetti Totali',
+      'totalPurchaseOrders': 'Ordini di Acquisto Totali',
+      'addCustomer': 'Aggiungi Cliente',
+      'editCustomer': 'Modifica Cliente',
+      'deleteCustomer': 'Elimina Cliente',
+      'customerName': 'Nome Cliente',
+      'required': 'Richiesto',
+      'save': 'Salva',
+      'cancel': 'Annulla',
+      'addProject': 'Aggiungi Progetto',
+      'editProject': 'Modifica Progetto',
+      'deleteProject': 'Elimina Progetto',
+      'projectId': 'ID Progetto',
+      'customerId': 'ID Cliente',
+      'cupCode': 'Codice CUP',
+      'addPurchaseOrder': 'Aggiungi Ordine di Acquisto',
+      'editPurchaseOrder': 'Modifica Ordine di Acquisto',
+      'deletePurchaseOrder': 'Elimina Ordine di Acquisto',
+      'id': 'ID',
+      'name': 'Nome',
+      'cigCode': 'Codice CIG',
+      'supplier': 'Fornitore',
+      'project': 'Progetto',
+      'actions': 'Azioni',
+      'addSupplier': 'Aggiungi Fornitore',
+      'editSupplier': 'Modifica Fornitore',
+      'deleteSupplier': 'Elimina Fornitore',
+      'supplierName': 'Nome Fornitore',
+      'vatNumber': 'Partita IVA',
+      'importBills': 'Importa Fatture',
+      'billId': 'ID Fattura',
+      'fileName': 'Nome File',
+      'billNumber': 'Numero Fattura',
+      'amount': 'Importo',
+      'uploadDate': 'Data Caricamento',
+      'status': 'Stato',
+      'approved': 'Approvata',
+      'paid': 'Pagata',
+      'allStatuses': 'Tutti gli Stati',
+      'needsApproval': 'Richiede Approvazione',
+      'rejected': 'Rifiutata',
+      'search': 'Cerca...',
+      'billsManagement': 'Gestione Fatture',
+      'purchaseOrder': 'Ordine di Acquisto',
+      'selectSupplier': 'Seleziona Fornitore',
+      'selectProject': 'Seleziona Progetto',
+      'draft': 'Bozza',
+      'waitingForApproval': 'In attesa di approvazione',
+      'inProgressByContractsOffice': 'In lavorazione Ufficio Contratti',
+      'assigned': 'Assegnato',
+      'cigCodeLength': 'Il codice CIG deve essere di 10 caratteri',
+      'poName': 'Nome Ordine di Acquisto',
+      'signedFile': 'File Firmato',
+      'selectFile': 'Seleziona File',
+      'dragAndDrop': 'Trascina e rilascia i file XML qui, oppure',
+      'browseFiles': 'Sfoglia i file',
+      'uploading': 'Caricamento...',
+      'uploadFailed': 'Caricamento fallito',
+      'uploadSuccess': 'Caricamento completato',
+      'close': 'Chiudi',
+      'upload': 'Carica',
+      'explainPurchaseReason': 'Spiega il motivo dell\'acquisto...',
+      'purchaseOrderDetails': 'Dettagli Ordine di Acquisto',
+      'basicInformation': 'Informazioni di Base',
+      'billsSummary': 'Riepilogo Fatture',
+      'timeline': 'Cronologia',
+      'totalAmount': 'Importo Totale',
+      'noBillsYet': 'Nessuna fattura ancora caricata',
+      'approve': 'Approva',
+      'reject': 'Rifiuta',
+      'assignPO': 'Assegna',
+      'closePO': 'Chiudi',
+      'closed': 'Chiuso',
       
-      // Common
-      add: 'Aggiungi',
-      edit: 'Modifica',
-      delete: 'Elimina',
-      save: 'Salva',
-      cancel: 'Annulla',
-      search: 'Cerca',
-      actions: 'Azioni',
-      create: 'Crea',
-      name: 'Nome',
-      id: 'ID',
-      status: 'Stato',
-      
-      // Dashboard
-      totalProjects: 'Progetti Totali',
-      totalCustomers: 'Clienti Totali',
-      totalPurchaseOrders: 'Ordini di Acquisto Totali',
-      recentActivity: 'Attività Recente',
-      
-      // Customers
-      addCustomer: 'Aggiungi Cliente',
-      editCustomer: 'Modifica Cliente',
-      customerName: 'Nome Cliente',
-      
-      // Projects
-      addProject: 'Aggiungi Progetto',
-      editProject: 'Modifica Progetto',
-      customer: 'Cliente',
-      cupCode: 'Codice CUP',
-      selectCustomer: 'Seleziona Cliente',
-      
-      // Purchase Orders
-      addPurchaseOrder: 'Aggiungi Ordine di Acquisto',
-      editPurchaseOrder: 'Modifica Ordine di Acquisto',
-      poName: 'Nome OA',
-      cigCode: 'Codice CIG',
-      supplier: 'Fornitore',
-      project: 'Progetto',
-      signedFile: 'File Firmato',
-      selectProject: 'Seleziona Progetto',
-      selectSupplier: 'Seleziona Fornitore',
-      dragDropFile: 'Trascina e rilascia un file qui, o clicca per selezionare',
-      fileSelected: 'File selezionato',
-      
-      // Purchase Order Status
-      draft: 'Bozza',
-      sentForApproval: 'Inviato per Approvazione',
-      waitingForApproval: 'In Attesa di Approvazione',
-      inProgressByContractsOffice: 'In Elaborazione dall\'Ufficio Contratti',
-      assigned: 'Assegnato',
-      paid: 'Pagato',
-      rejected: 'Rifiutato',
-      
-      // Bills
-      billsManagement: 'Gestione Fatture',
-      importBills: 'Importa Fatture',
-      importBillsTitle: 'Importa Fatture XML',
-      importBillsDescription: 'Carica file XML contenenti informazioni sulle fatture. È possibile selezionare più file.',
-      billId: 'ID Fattura',
-      fileName: 'Nome File',
-      billNumber: 'Numero Fattura',
-      amount: 'Importo',
-      purchaseOrder: 'Ordine di Acquisto',
-      uploadDate: 'Data Caricamento',
-      allStatuses: 'Tutti gli Stati',
-      needsApproval: 'Richiede Approvazione',
-      approved: 'Approvata',
-      markAsPaid: 'Segna come Pagata',
-      dragDropXmlFiles: 'Trascina e rilascia file XML qui',
-      orClickToSelect: 'o clicca per selezionare i file',
-      selectFiles: 'Seleziona File',
-      selectedFiles: 'File Selezionati',
-      importFiles: 'Importa File',
-      
-      // Suppliers
-      addSupplier: 'Aggiungi Fornitore',
-      editSupplier: 'Modifica Fornitore',
-      vatNumber: 'Partita IVA',
-      supplierDetails: 'Dettagli Fornitore',
-      
-      // Validation
-      required: 'Questo campo è obbligatorio',
-      cigCodeLength: 'Il Codice CIG deve essere di esattamente 10 caratteri',
-      cupCodeLength: 'Il Codice CUP deve essere di esattamente 15 caratteri',
+      // Timeline events
+      'purchaseOrderCreated': 'Ordine di acquisto creato',
+      'submittedForApproval': 'Inviato per approvazione',
+      'purchaseOrderApproved': 'Ordine di acquisto approvato',
+      'purchaseOrderRejected': 'Ordine di acquisto rifiutato',
+      'purchaseOrderAssigned': 'Ordine di acquisto assegnato',
+      'purchaseOrderClosed': 'Ordine di acquisto chiuso',
+      'billUploaded': 'Fattura caricata: {{fileName}}',
+      'billApproved': 'Fattura approvata: {{fileName}}',
+      'billPaid': 'Fattura pagata: {{fileName}}',
     }
   }
 };
@@ -201,11 +106,10 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'it', // default to Italian
-    fallbackLng: 'en',
+    lng: 'it',
     interpolation: {
-      escapeValue: false
-    }
+      escapeValue: false,
+    },
   });
 
 export default i18n;
