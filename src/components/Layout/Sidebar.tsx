@@ -7,6 +7,7 @@ import {
   FolderOpen, 
   ShoppingCart, 
   Building2,
+  Receipt,
   Menu,
   Globe
 } from 'lucide-react';
@@ -36,6 +37,7 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
     { id: 'customers', title: t('customers'), icon: Users },
     { id: 'projects', title: t('projects'), icon: FolderOpen },
     { id: 'purchaseOrders', title: t('purchaseOrders'), icon: ShoppingCart },
+    { id: 'bills', title: t('bills'), icon: Receipt },
     { id: 'suppliers', title: t('suppliers'), icon: Building2 },
   ];
 
