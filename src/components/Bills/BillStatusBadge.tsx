@@ -2,36 +2,25 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
+import { BillStatus } from '@/types';
 
-type PurchaseOrderStatus = 'draft' | 'waiting_for_approval' | 'in_progress' | 'assigned' | 'paid' | 'rejected';
-
-interface StatusBadgeProps {
-  status: PurchaseOrderStatus;
+interface BillStatusBadgeProps {
+  status: BillStatus;
 }
 
-export const StatusBadge = ({ status }: StatusBadgeProps) => {
+export const BillStatusBadge = ({ status }: BillStatusBadgeProps) => {
   const { t } = useTranslation();
 
-  const getStatusConfig = (status: PurchaseOrderStatus) => {
+  const getStatusConfig = (status: BillStatus) => {
     switch (status) {
-      case 'draft':
+      case 'needs_approval':
         return {
-          label: t('draft'),
-          className: 'bg-gray-500 hover:bg-gray-600 text-white'
+          label: t('needsApproval'),
+          className: 'bg-orange-500 hover:bg-orange-600 text-white'
         };
-      case 'waiting_for_approval':
+      case 'approved':
         return {
-          label: t('waitingForApproval'),
-          className: 'bg-yellow-500 hover:bg-yellow-600 text-white'
-        };
-      case 'in_progress':
-        return {
-          label: t('inProgressByContractsOffice'),
-          className: 'bg-yellow-500 hover:bg-yellow-600 text-white'
-        };
-      case 'assigned':
-        return {
-          label: t('assigned'),
+          label: t('approved'),
           className: 'bg-green-500 hover:bg-green-600 text-white'
         };
       case 'paid':

@@ -11,6 +11,7 @@ const resources = {
       projects: 'Projects',
       purchaseOrders: 'Purchase Orders',
       suppliers: 'Suppliers',
+      bills: 'Bills',
       
       // Common
       add: 'Add',
@@ -59,10 +60,32 @@ const resources = {
       // Purchase Order Status
       draft: 'Draft',
       sentForApproval: 'Sent for Approval',
+      waitingForApproval: 'Waiting for Approval',
       inProgressByContractsOffice: 'In Progress by Contracts Office',
       assigned: 'Assigned',
       paid: 'Paid',
       rejected: 'Rejected',
+      
+      // Bills
+      billsManagement: 'Bills Management',
+      importBills: 'Import Bills',
+      importBillsTitle: 'Import XML Bills',
+      importBillsDescription: 'Upload XML files containing bill information. Multiple files can be selected.',
+      billId: 'Bill ID',
+      fileName: 'File Name',
+      billNumber: 'Bill Number',
+      amount: 'Amount',
+      purchaseOrder: 'Purchase Order',
+      uploadDate: 'Upload Date',
+      allStatuses: 'All Statuses',
+      needsApproval: 'Needs Approval',
+      approved: 'Approved',
+      markAsPaid: 'Mark as Paid',
+      dragDropXmlFiles: 'Drag & drop XML files here',
+      orClickToSelect: 'or click to select files',
+      selectFiles: 'Select Files',
+      selectedFiles: 'Selected Files',
+      importFiles: 'Import Files',
       
       // Suppliers
       addSupplier: 'Add Supplier',
@@ -84,6 +107,7 @@ const resources = {
       projects: 'Progetti',
       purchaseOrders: 'Ordini di Acquisto',
       suppliers: 'Fornitori',
+      bills: 'Fatture',
       
       // Common
       add: 'Aggiungi',
@@ -132,10 +156,32 @@ const resources = {
       // Purchase Order Status
       draft: 'Bozza',
       sentForApproval: 'Inviato per Approvazione',
+      waitingForApproval: 'In Attesa di Approvazione',
       inProgressByContractsOffice: 'In Elaborazione dall\'Ufficio Contratti',
       assigned: 'Assegnato',
       paid: 'Pagato',
       rejected: 'Rifiutato',
+      
+      // Bills
+      billsManagement: 'Gestione Fatture',
+      importBills: 'Importa Fatture',
+      importBillsTitle: 'Importa Fatture XML',
+      importBillsDescription: 'Carica file XML contenenti informazioni sulle fatture. È possibile selezionare più file.',
+      billId: 'ID Fattura',
+      fileName: 'Nome File',
+      billNumber: 'Numero Fattura',
+      amount: 'Importo',
+      purchaseOrder: 'Ordine di Acquisto',
+      uploadDate: 'Data Caricamento',
+      allStatuses: 'Tutti gli Stati',
+      needsApproval: 'Richiede Approvazione',
+      approved: 'Approvata',
+      markAsPaid: 'Segna come Pagata',
+      dragDropXmlFiles: 'Trascina e rilascia file XML qui',
+      orClickToSelect: 'o clicca per selezionare i file',
+      selectFiles: 'Seleziona File',
+      selectedFiles: 'File Selezionati',
+      importFiles: 'Importa File',
       
       // Suppliers
       addSupplier: 'Aggiungi Fornitore',

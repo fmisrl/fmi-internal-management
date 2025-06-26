@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/Layout/Sidebar';
@@ -7,34 +6,9 @@ import { CustomerList } from '@/components/Customers/CustomerList';
 import { ProjectList } from '@/components/Projects/ProjectList';
 import { PurchaseOrderList } from '@/components/PurchaseOrders/PurchaseOrderList';
 import { SupplierList } from '@/components/Suppliers/SupplierList';
+import { BillsList } from '@/components/Bills/BillsList';
+import { Customer, Project, Supplier, PurchaseOrder, Bill } from '@/types';
 import '../i18n';
-
-interface Customer {
-  id: string;
-  name: string;
-}
-
-interface Project {
-  id: string;
-  customerId?: string;
-  cupCode?: string;
-}
-
-interface Supplier {
-  id: string;
-  name: string;
-  vatNumber: string;
-}
-
-interface PurchaseOrder {
-  id: string;
-  name: string;
-  cigCode?: string;
-  supplierId: string;
-  projectId?: string;
-  signedFile?: File;
-  status: 'draft' | 'sent_for_approval' | 'in_progress' | 'assigned' | 'paid' | 'rejected';
-}
 
 const Index = () => {
   console.log('Index component rendering...');
@@ -61,6 +35,18 @@ const Index = () => {
       projectId: '1',
       status: 'draft'
     },
+  ]);
+  const [bills, setBills] = useState<Bill[]>([
+    {
+      id: 'BILL-001',
+      purchaseOrderId: 'ACQ/2024/001',
+      fileName: 'fattura_001.xml',
+      xmlFile: new File([''], 'fattura_001.xml', { type: 'text/xml' }),
+      amount: 1500.00,
+      billNumber: 'FAT-2024-001',
+      status: 'needs_approval',
+      uploadDate: new Date('2024-01-15'),
+    }
   ]);
 
   // Customer management
@@ -115,6 +101,43 @@ const Index = () => {
     setPurchaseOrders(purchaseOrders.filter(p => p.id !== id));
   };
 
+  // Bill management
+  const handleImportBills = (files: File[]) => {
+    const newBills: Bill[] = files.map((file, index) => ({
+      id: `BILL-${Date.now()}-${index}`,
+      purchaseOrderId: purchaseOrders[0]?.id || '', // In real app, this would be selected
+      fileName: file.name,
+      xmlFile: file,
+      status: 'needs_approval',
+      uploadDate: new Date(),
+    }));
+    setBills(prev => [...prev, ...newBills]);
+  };
+
+  const handleApproveBill = (billId: string) => {
+    setBills(bills => bills.map(bill => 
+      bill.id === billId 
+        ? { ...bill, status: 'approved', approvalDate: new Date() }
+        : bill
+    ));
+  };
+
+  const handleRejectBill = (billId: string) => {
+    setBills(bills => bills.map(bill => 
+      bill.id === billId 
+        ? { ...bill, status: 'rejected' }
+        : bill
+    ));
+  };
+
+  const handlePayBill = (billId: string) => {
+    setBills(bills => bills.map(bill => 
+      bill.id === billId 
+        ? { ...bill, status: 'paid', paymentDate: new Date() }
+        : bill
+    ));
+  };
+
   const renderContent = () => {
     console.log('Rendering content for section:', activeSection);
     
@@ -156,6 +179,20 @@ const Index = () => {
             onAddPurchaseOrder={handleAddPurchaseOrder}
             onEditPurchaseOrder={handleEditPurchaseOrder}
             onDeletePurchaseOrder={handleDeletePurchaseOrder}
+          />
+        );
+      case 'bills':
+        return (
+          <BillsList
+            bills={bills}
+            purchaseOrders={purchaseOrders}
+            suppliers={suppliers}
+            customers={customers}
+            projects={projects}
+            onImportBills={handleImportBills}
+            onApproveBill={handleApproveBill}
+            onRejectBill={handleRejectBill}
+            onPayBill={handlePayBill}
           />
         );
       case 'suppliers':
