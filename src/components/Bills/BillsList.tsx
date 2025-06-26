@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Table,
   TableBody,
@@ -91,6 +92,18 @@ export const BillsList = ({
     }).format(amount);
   };
 
+  const handleApproveCheckbox = (billId: string, checked: boolean) => {
+    if (checked) {
+      onApproveBill(billId);
+    }
+  };
+
+  const handlePayCheckbox = (billId: string, checked: boolean) => {
+    if (checked) {
+      onPayBill(billId);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -141,6 +154,8 @@ export const BillsList = ({
                 <TableHead>{t('supplier')}</TableHead>
                 <TableHead>{t('uploadDate')}</TableHead>
                 <TableHead>{t('status')}</TableHead>
+                <TableHead>{t('approved')}</TableHead>
+                <TableHead>{t('paid')}</TableHead>
                 <TableHead className="text-right">{t('actions')}</TableHead>
               </TableRow>
             </TableHeader>
@@ -164,36 +179,30 @@ export const BillsList = ({
                     <TableCell>
                       <BillStatusBadge status={bill.status} />
                     </TableCell>
+                    <TableCell>
+                      <Checkbox
+                        checked={bill.status === 'approved' || bill.status === 'paid'}
+                        onCheckedChange={(checked) => handleApproveCheckbox(bill.id, checked as boolean)}
+                        disabled={bill.status === 'rejected' || bill.status === 'paid'}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Checkbox
+                        checked={bill.status === 'paid'}
+                        onCheckedChange={(checked) => handlePayCheckbox(bill.id, checked as boolean)}
+                        disabled={bill.status !== 'approved'}
+                      />
+                    </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end space-x-2">
                         {bill.status === 'needs_approval' && (
-                          <>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => onApproveBill(bill.id)}
-                              className="text-green-600 hover:text-green-700"
-                            >
-                              <CheckCircle className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => onRejectBill(bill.id)}
-                              className="text-red-600 hover:text-red-700"
-                            >
-                              <XCircle className="h-4 w-4" />
-                            </Button>
-                          </>
-                        )}
-                        {bill.status === 'approved' && (
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => onPayBill(bill.id)}
-                            className="text-blue-600 hover:text-blue-700"
+                            onClick={() => onRejectBill(bill.id)}
+                            className="text-red-600 hover:text-red-700"
                           >
-                            {t('markAsPaid')}
+                            <XCircle className="h-4 w-4" />
                           </Button>
                         )}
                       </div>
